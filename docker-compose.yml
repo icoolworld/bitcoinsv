@@ -1,0 +1,27 @@
+version: "3"
+services:
+  bitcoind:
+    image: bitcoinsv/bitcoin-sv
+    # healthcheck:
+    #   test: ["CMD", "/entrypoint.sh", "bitcoin-cli", "getblockchaininfo"]
+    ports:
+      # change to 18333 if running testnet
+      - "8333:8333"
+    volumes:
+      - ./bitcoin-data:/data
+    networks:
+      - bitcoin
+    # specify additional command line arguments here
+    command: bitcoind -testnet
+  bitcoin-cli:
+    image: bitcoinsv/bitcoin-sv
+    # entrypoint: ["/entrypoint.sh", "bitcoin-cli"]
+    command: ""
+    depends_on:
+      - bitcoind
+    # network_mode: service:bitcoind
+    networks:
+      - bitcoin
+
+networks:
+  bitcoin:
